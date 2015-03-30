@@ -45,11 +45,14 @@ public class CustomListAdapter extends BaseAdapter {
         if (convertView == null)
             convertView = inflater.inflate(R.layout.list_row, null);
 
+        TextView product_id = (TextView) convertView.findViewById(R.id.row_product_id);
         TextView name = (TextView) convertView.findViewById(R.id.row_name);
         TextView price = (TextView) convertView.findViewById(R.id.row_price);
 
         Drink d = drinkItems.get(position);
 
+
+        product_id.setText(String.valueOf(d.getID()).toString());
         name.setText(d.getName());
         price.setText(String.format("%.02f", d.getPrice()) + " €");
 

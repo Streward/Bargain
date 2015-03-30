@@ -9,9 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +42,39 @@ public class MainActivity extends ActionBarActivity {
             Log.d("Item", "Add Item");
         }*/
 
+        TextView summary = (TextView) findViewById(R.id.price_summary);
+        summary.setText(db.getSummary() + " €");
+
         //ListAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
         CustomListAdapter adapter = new CustomListAdapter(this, allDrinks);
         recent_list_view.setAdapter(adapter);
+
+        recent_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView product_id = (TextView) view.findViewById(R.id.row_product_id);
+                TextView listText = (TextView) view.findViewById(R.id.row_name);
+                String item = listText.getText().toString();
+                TextView listText2 = (TextView) view.findViewById(R.id.row_price);
+                String item2 = listText2.getText().toString();
+                String text = item + " - " + item2;
+                Toast.makeText(getBaseContext(), text, Toast.LENGTH_LONG).show();
+                BargainDatabaseHelper db = new BargainDatabaseHelper(getBaseContext());
+                Invoice invoice = new Invoice();
+                String drink_id = product_id.getText().toString();
+                Log.d("SETDRINK",drink_id);
+                invoice.setDrinkID(Integer.parseInt(drink_id));
+                invoice.setPriceME(db.getDrinkPrice(Integer.parseInt(drink_id)));
+                db.createInvoice(invoice);
+                TextView summary = (TextView) findViewById(R.id.price_summary);
+                String db_summary = db.getSummary();
+                Log.d("SUMMARY", db_summary);
+                summary.setText(db_summary + " €");
+                db.close();
+
+            }
+        });
+
     }
 
     @Override
@@ -121,11 +154,19 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent;
+            intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         }
         if (id == R.id.action_new) {
             Intent intent;
             intent = new Intent(this, NewTransaction.class);
+            startActivity(intent);
+        }
+
+        if (id == R.id.action_pay) {
+            Intent intent;
+            intent = new Intent(this, InvoiceActivity.class);
             startActivity(intent);
         }
 

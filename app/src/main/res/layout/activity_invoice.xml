@@ -11,7 +11,8 @@
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
        android:drawableLeft="@drawable/ic_action_pay"
-       android:text="Paid" />
+       android:text="Paid"
+       android:onClick="deleteInvoice"/>
 
     <ListView
         android:id="@+id/invoice_list_view"

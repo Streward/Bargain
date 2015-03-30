@@ -1,36 +1,27 @@
 package de.streward.bargain;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListView;
-
-import java.util.List;
 
 
-public class InvoiceActivity extends ActionBarActivity {
+public class SettingsActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_invoice);
-
-        ListView invoice_list_view = (ListView) findViewById(R.id.invoice_list_view);
-        BargainDatabaseHelper db = new BargainDatabaseHelper(this);
-        List<Invoice> allLines = db.getAllLines();
-
-        InvoiceListAdapter adapter = new InvoiceListAdapter(this, allLines);
-        invoice_list_view.setAdapter(adapter);
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new SettingsFragment())
+                .commit();
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_invoice, menu);
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
         return true;
     }
 
@@ -47,13 +38,5 @@ public class InvoiceActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void deleteInvoice(View view) {
-        BargainDatabaseHelper db = new BargainDatabaseHelper(getBaseContext());
-        db.deleteInvoice();
-        Intent intent = new Intent(this, MainActivity.class);
-        finish();
-        startActivity(intent);
     }
 }

@@ -2,6 +2,7 @@ package de.streward.bargain;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,8 +51,8 @@ public class InvoiceListAdapter extends BaseAdapter{
         TextView price = (TextView) convertView.findViewById(R.id.row_price);
 
         Invoice d = invoiceItems.get(position);
-
-        name.setText(d.getDrinkID());
+        Log.d("DrinkID",String.valueOf(d.getDrinkID()).toString());
+        name.setText(String.valueOf(d.getDrinkID()).toString());
         price.setText(String.format("%.02f", d.getPriceME()) + " €");
 
         return convertView;
